@@ -1,0 +1,133 @@
+<div class="friends-container">
+  <!-- Navigation -->
+  <mat-toolbar class="navbar">
+    <div class="nav-content">
+      <div class="logo" routerLink="/">
+        <mat-icon>group</mat-icon>
+        <span class="logo-text">SoloPal</span>
+      </div>
+      <div class="nav-actions">
+        <button mat-button routerLink="/activities">Browse Activities</button>
+        <button mat-button routerLink="/create-activity">Create Activity</button>
+      </div>
+    </div>
+  </mat-toolbar>
+
+  <div class="main-content">
+    <div class="friends-content">
+      <mat-card class="friends-card">
+        <mat-card-header>
+          <mat-card-title>Friends & Connections</mat-card-title>
+          <mat-card-subtitle>Manage your friendships and friend requests</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <mat-tab-group>
+            <!-- Friends Tab -->
+            <mat-tab label="Friends">
+              <div class="tab-content">
+                <div class="friends-list" *ngIf="friends.length > 0">
+                  <div class="friend-item" *ngFor="let friend of friends">
+                    <div class="friend-avatar">
+                      <mat-icon *ngIf="!friend.friend.profilePic">account_circle</mat-icon>
+                      <img *ngIf="friend.friend.profilePic" 
+                           [src]="friend.friend.profilePic" 
+                           [alt]="friend.friend.firstName">
+                    </div>
+                    <div class="friend-info">
+                      <div class="friend-name">
+                        {{ friend.friend.firstName }} {{ friend.friend.lastName }}
+                      </div>
+                      <div class="friend-since">
+                        Friends since {{ formatDate(friend.createdAt) }}
+                      </div>
+                    </div>
+                    <div class="friend-actions">
+                      <button mat-icon-button (click)="messageUser(friend.friend.id)">
+                        <mat-icon>message</mat-icon>
+                      </button>
+                      <button mat-icon-button color="warn" (click)="removeFriend(friend.id)">
+                        <mat-icon>person_remove</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="no-friends" *ngIf="friends.length === 0">
+                  <mat-icon>people_outline</mat-icon>
+                  <h3>No friends yet</h3>
+                  <p>Start connecting with people by joining activities!</p>
+                </div>
+              </div>
+            </mat-tab>
+
+            <!-- Friend Requests Tab -->
+            <mat-tab label="Friend Requests">
+              <div class="tab-content">
+                <!-- Received Requests -->
+                <div class="requests-section" *ngIf="friendRequests.received.length > 0">
+                  <h3>Received Requests</h3>
+                  <div class="request-item" *ngFor="let request of friendRequests.received">
+                    <div class="request-avatar">
+                      <mat-icon *ngIf="!request.userA.profilePic">account_circle</mat-icon>
+                      <img *ngIf="request.userA.profilePic" 
+                           [src]="request.userA.profilePic" 
+                           [alt]="request.userA.firstName">
+                    </div>
+                    <div class="request-info">
+                      <div class="request-name">
+                        {{ request.userA.firstName }} {{ request.userA.lastName }}
+                      </div>
+                      <div class="request-date">
+                        Sent {{ formatDate(request.createdAt) }}
+                      </div>
+                    </div>
+                    <div class="request-actions">
+                      <button mat-raised-button color="primary" 
+                             (click)="respondToFriendRequest(request.id, FriendshipStatus.ACCEPTED)">
+                        Accept
+                      </button>
+                      <button mat-button 
+                             (click)="respondToFriendRequest(request.id, FriendshipStatus.BLOCKED)">
+                        Decline
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sent Requests -->
+                <div class="requests-section" *ngIf="friendRequests.sent.length > 0">
+                  <h3>Sent Requests</h3>
+                  <div class="request-item" *ngFor="let request of friendRequests.sent">
+                    <div class="request-avatar">
+                      <mat-icon *ngIf="!request.userB.profilePic">account_circle</mat-icon>
+                      <img *ngIf="request.userB.profilePic" 
+                           [src]="request.userB.profilePic" 
+                           [alt]="request.userB.firstName">
+                    </div>
+                    <div class="request-info">
+                      <div class="request-name">
+                        {{ request.userB.firstName }} {{ request.userB.lastName }}
+                      </div>
+                      <div class="request-date">
+                        Sent {{ formatDate(request.createdAt) }}
+                      </div>
+                    </div>
+                    <div class="request-status">
+                      <span class="pending-status">Pending</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="no-requests" *ngIf="friendRequests.received.length === 0 && friendRequests.sent.length === 0">
+                  <mat-icon>mail_outline</mat-icon>
+                  <h3>No friend requests</h3>
+                  <p>Friend requests will appear here when you send or receive them.</p>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

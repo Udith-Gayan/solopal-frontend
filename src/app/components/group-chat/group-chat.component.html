@@ -1,0 +1,73 @@
+<div class="group-chat-container">
+  <div class="chat-header">
+    <div class="chat-info">
+      <h3>{{ groupChat?.name }}</h3>
+      <p>{{ groupChat?.activity?.title }}</p>
+    </div>
+    <div class="chat-actions">
+      <button mat-icon-button (click)="showMembers = !showMembers">
+        <mat-icon>people</mat-icon>
+      </button>
+      <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="chat-content" [class.show-members]="showMembers">
+    <div class="messages-panel">
+      <div class="messages-container" #messagesContainer>
+        <div class="message" 
+             *ngFor="let message of groupChat?.messages"
+             [class.own-message]="message.senderId === currentUser?.id">
+          <div class="message-avatar" *ngIf="message.senderId !== currentUser?.id">
+            <mat-icon *ngIf="!message.sender.profilePic">account_circle</mat-icon>
+            <img *ngIf="message.sender.profilePic" [src]="message.sender.profilePic" [alt]="message.sender.firstName">
+          </div>
+          <div class="message-content">
+            <div class="message-header" *ngIf="message.senderId !== currentUser?.id">
+              <span class="sender-name">{{ message.sender.firstName }} {{ message.sender.lastName }}</span>
+            </div>
+            <div class="message-text">{{ message.content }}</div>
+            <div class="message-time">{{ formatMessageTime(message.createdAt) }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="message-input">
+        <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+          <mat-form-field appearance="outline" class="input-field">
+            <input matInput formControlName="content" 
+                   placeholder="Type your message..." 
+                   (keydown.enter)="sendMessage()">
+          </mat-form-field>
+          <button mat-icon-button color="primary" type="submit" 
+                 [disabled]="messageForm.invalid || sendingMessage">
+            <mat-icon>send</mat-icon>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="members-panel" *ngIf="showMembers">
+      <h4>Members ({{ groupChat?.members?.length }})</h4>
+      <div class="members-list">
+        <div class="member-item" *ngFor="let member of groupChat?.members">
+          <div class="member-avatar">
+            <mat-icon *ngIf="!member.user.profilePic">account_circle</mat-icon>
+            <img *ngIf="member.user.profilePic" [src]="member.user.profilePic" [alt]="member.user.firstName">
+          </div>
+          <div class="member-info">
+            <div class="member-name">{{ member.user.firstName }} {{ member.user.lastName }}</div>
+            <div class="member-role" *ngIf="member.isAdmin">Admin</div>
+          </div>
+          <div class="member-actions" *ngIf="isCurrentUserAdmin && member.userId !== currentUser?.id">
+            <button mat-icon-button (click)="removeMember(member.userId)" color="warn">
+              <mat-icon>remove_circle</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

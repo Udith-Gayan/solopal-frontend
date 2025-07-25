@@ -1,0 +1,153 @@
+<div class="create-activity-container">
+  <!-- Navigation -->
+  <mat-toolbar class="navbar">
+    <div class="nav-content">
+      <div class="logo" routerLink="/">
+        <mat-icon>group</mat-icon>
+        <span class="logo-text">SoloPal</span>
+      </div>
+      <div class="nav-actions">
+        <button mat-button routerLink="/activities">Browse Activities</button>
+        <button mat-icon-button [matMenuTriggerFor]="userMenu">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+          </button>
+          <button mat-menu-item routerLink="/messages">
+            <mat-icon>message</mat-icon>
+            <span>Messages</span>
+          </button>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </mat-toolbar>
+
+  <div class="main-content">
+    <div class="form-container">
+      <mat-card class="create-form-card">
+        <mat-card-header>
+          <mat-card-title>Create New Activity</mat-card-title>
+          <mat-card-subtitle>Share an experience with like-minded people</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="activityForm" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Activity Title</mat-label>
+                <input matInput formControlName="title" placeholder="What's your activity about?">
+                <mat-error *ngIf="activityForm.get('title')?.hasError('required')">
+                  Title is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description" rows="4" 
+                         placeholder="Describe your activity in detail..."></textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row two-columns">
+              <mat-form-field appearance="outline">
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="category">
+                  <mat-option value="LUNCH">Lunch</mat-option>
+                  <mat-option value="TRIP">Trip</mat-option>
+                  <mat-option value="COFFEE">Coffee</mat-option>
+                  <mat-option value="PARTY">Party</mat-option>
+                  <mat-option value="WALK">Walk</mat-option>
+                  <mat-option value="TRAVEL">Travel</mat-option>
+                  <mat-option value="DINING">Dining</mat-option>
+                  <mat-option value="SPORTS">Sports</mat-option>
+                  <mat-option value="OUTDOOR">Outdoor</mat-option>
+                  <mat-option value="FITNESS">Fitness</mat-option>
+                  <mat-option value="EVENT">Event</mat-option>
+                  <mat-option value="OTHER">Other</mat-option>
+                </mat-select>
+                <mat-error *ngIf="activityForm.get('category')?.hasError('required')">
+                  Category is required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Visibility</mat-label>
+                <mat-select formControlName="visibility">
+                  <mat-option value="PUBLIC">Public</mat-option>
+                  <mat-option value="FRIENDS_ONLY">Friends Only</mat-option>
+                  <mat-option value="PRIVATE">Private</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row two-columns">
+              <mat-form-field appearance="outline">
+                <mat-label>Date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="date">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="activityForm.get('date')?.hasError('required')">
+                  Date is required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Time</mat-label>
+                <input matInput type="time" formControlName="time">
+                <mat-error *ngIf="activityForm.get('time')?.hasError('required')">
+                  Time is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row two-columns">
+              <mat-form-field appearance="outline">
+                <mat-label>Location</mat-label>
+                <input matInput formControlName="location" placeholder="Where will this activity take place?">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Max Participants</mat-label>
+                <input matInput type="number" formControlName="maxParticipants" min="1" max="50" placeholder="Leave empty for unlimited">
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <div class="interests-section">
+                <h4>Interests (Optional)</h4>
+                <p class="interests-help">Select interests that match your activity to help others find it</p>
+                <div class="interests-grid">
+                  <mat-checkbox *ngFor="let interest of availableInterests" 
+                               [checked]="selectedInterests.includes(interest)"
+                               (change)="toggleInterest(interest)">
+                    {{ interest }}
+                  </mat-checkbox>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button mat-button type="button" routerLink="/activities" class="cancel-button">
+                Cancel
+              </button>
+              <button mat-raised-button color="primary" type="submit" 
+                     [disabled]="activityForm.invalid || loading" class="submit-button">
+                <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+                <span *ngIf="!loading">Create Activity</span>
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

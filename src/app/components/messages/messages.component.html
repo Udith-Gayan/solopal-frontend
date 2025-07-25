@@ -1,0 +1,114 @@
+<div class="messages-container">
+  <!-- Navigation -->
+  <mat-toolbar class="navbar">
+    <div class="nav-content">
+      <div class="logo" routerLink="/">
+        <mat-icon>group</mat-icon>
+        <span class="logo-text">Social Circle</span>
+      </div>
+      <div class="nav-actions">
+        <button mat-button routerLink="/activities">Browse Activities</button>
+        <button mat-button routerLink="/create-activity">Create Activity</button>
+      </div>
+    </div>
+  </mat-toolbar>
+
+  <div class="main-content">
+    <div class="messages-content">
+      <mat-card class="messages-card">
+        <mat-card-header>
+          <mat-card-title>Messages</mat-card-title>
+          <mat-card-subtitle>Connect with other members</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="messages-layout">
+            <!-- Conversations List -->
+            <div class="conversations-panel">
+              <h3>Conversations</h3>
+              <div class="conversations-list" *ngIf="conversations.length > 0">
+                <div class="conversation-item" 
+                     *ngFor="let conversation of conversations"
+                     [class.active]="selectedConversation?.partner?.id === conversation.partner.id"
+                     (click)="selectConversation(conversation)">
+                  <div class="conversation-avatar">
+                    <mat-icon *ngIf="!conversation.partner.profilePic">account_circle</mat-icon>
+                    <img *ngIf="conversation.partner.profilePic" 
+                         [src]="conversation.partner.profilePic" 
+                         [alt]="conversation.partner.firstName">
+                  </div>
+                  <div class="conversation-info">
+                    <div class="conversation-name">
+                      {{ conversation.partner.firstName }} {{ conversation.partner.lastName }}
+                    </div>
+                    <div class="conversation-preview">
+                      {{ conversation.lastMessage.content }}
+                    </div>
+                    <div class="conversation-time">
+                      {{ formatMessageTime(conversation.lastMessage.createdAt) }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="no-conversations" *ngIf="conversations.length === 0">
+                <mat-icon>chat_bubble_outline</mat-icon>
+                <p>No conversations yet</p>
+                <p class="help-text">Start chatting with other members by joining activities!</p>
+              </div>
+            </div>
+
+            <!-- Chat Panel -->
+            <div class="chat-panel">
+              <div class="chat-header" *ngIf="selectedConversation">
+                <div class="chat-partner">
+                  <div class="partner-avatar">
+                    <mat-icon *ngIf="!selectedConversation.partner.profilePic">account_circle</mat-icon>
+                    <img *ngIf="selectedConversation.partner.profilePic" 
+                         [src]="selectedConversation.partner.profilePic" 
+                         [alt]="selectedConversation.partner.firstName">
+                  </div>
+                  <div class="partner-info">
+                    <div class="partner-name">
+                      {{ selectedConversation.partner.firstName }} {{ selectedConversation.partner.lastName }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chat-messages" *ngIf="selectedConversation" #messagesContainer>
+                <div class="message" 
+                     *ngFor="let message of currentMessages"
+                     [class.own-message]="message.senderId === currentUser?.id">
+                  <div class="message-content">
+                    <div class="message-text">{{ message.content }}</div>
+                    <div class="message-time">{{ formatMessageTime(message.createdAt) }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chat-input" *ngIf="selectedConversation">
+                <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+                  <mat-form-field appearance="outline" class="message-input">
+                    <input matInput formControlName="content" 
+                           placeholder="Type your message..." 
+                           (keydown.enter)="sendMessage()">
+                  </mat-form-field>
+                  <button mat-icon-button color="primary" type="submit" 
+                         [disabled]="messageForm.invalid || sendingMessage">
+                    <mat-icon>send</mat-icon>
+                  </button>
+                </form>
+              </div>
+
+              <div class="no-chat-selected" *ngIf="!selectedConversation">
+                <mat-icon>chat</mat-icon>
+                <h3>Select a conversation</h3>
+                <p>Choose a conversation from the list to start chatting</p>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,117 @@
+<mat-card class="activity-card">
+  <mat-card-header>
+    <div class="card-header-content">
+      <div class="category-badge" [class]="'category-' + activity.category.toLowerCase()">
+        {{ getCategoryDisplay(activity.category) }}
+      </div>
+      <div class="visibility-badge" [class]="'visibility-' + activity.visibility.toLowerCase()">
+        {{ getVisibilityDisplay(activity.visibility) }}
+      </div>
+      <div class="spots-info">
+        <span class="spots-left">{{ getAvailableSpots() }} spots left</span>
+      </div>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <h3 class="activity-title">{{ activity.title }}</h3>
+    <p class="activity-description" *ngIf="activity.description">{{ activity.description }}</p>
+
+    <div class="activity-details">
+      <div class="detail-item">
+        <mat-icon>event</mat-icon>
+        <span>{{ formatDate(activity.dateTime) }}</span>
+      </div>
+      <div class="detail-item" *ngIf="activity.location">
+        <mat-icon>location_on</mat-icon>
+        <span>{{ activity.location }}</span>
+      </div>
+      <div class="detail-item">
+        <mat-icon>person</mat-icon>
+        <span>Hosted by {{ activity.creator.firstName }} {{ activity.creator.lastName }}</span>
+      </div>
+    </div>
+
+    <div class="interests" *ngIf="activity.interests && activity.interests.length > 0">
+      <mat-chip-listbox>
+        <mat-chip *ngFor="let interest of activity.interests">{{ interest }}</mat-chip>
+      </mat-chip-listbox>
+    </div>
+
+    <div class="participants" *ngIf="activity.participants.length > 0">
+      <h4>Participants ({{ activity.currentParticipants }}/{{ activity.maxParticipants || '∞' }})</h4>
+      <div class="participant-avatars">
+        <div class="participant-avatar" *ngFor="let participant of activity.participants.slice(0, 3)">
+          <mat-icon *ngIf="!participant.user.profilePic">account_circle</mat-icon>
+          <img *ngIf="participant.user.profilePic" [src]="participant.user.profilePic" [alt]="participant.user.firstName">
+        </div>
+        <div class="more-participants" *ngIf="activity.participants.length > 3">
+          +{{ activity.participants.length - 3 }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback Section -->
+    <div class="feedback-section" *ngIf="activity.feedback && activity.feedback.length > 0">
+      <h4>Recent Feedback</h4>
+      <div class="feedback-preview">
+        <div class="feedback-item" *ngFor="let feedback of activity.feedback.slice(0, 2)">
+          <div class="rating">
+            <mat-icon *ngFor="let star of getStarArray(feedback.rating)">star</mat-icon>
+          </div>
+          <p class="feedback-comment" *ngIf="feedback.comment">{{ feedback.comment }}</p>
+          <span class="feedback-author">- {{ feedback.fromUser.firstName }}</span>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <div class="card-actions">
+      <button 
+        mat-raised-button 
+        color="primary" 
+        *ngIf="!isUserParticipant() && !isUserCreator() && hasAvailableSpots()"
+        (click)="onJoinClick()"
+        class="action-button">
+        Join Activity
+      </button>
+
+      <button 
+        mat-raised-button 
+        color="warn" 
+        *ngIf="isUserParticipant()"
+        (click)="onLeaveClick()"
+        class="action-button">
+        Leave Activity
+      </button>
+
+      <button 
+        mat-stroked-button 
+        *ngIf="isUserCreator()"
+        class="action-button host-button">
+        You're the Host
+      </button>
+
+      <button 
+        mat-stroked-button 
+        *ngIf="!hasAvailableSpots() && !isUserParticipant() && !isUserCreator()"
+        disabled
+        class="action-button">
+        Activity Full
+      </button>
+
+      <button mat-icon-button (click)="onMessageClick()" *ngIf="currentUser" class="message-button">
+        <mat-icon>message</mat-icon>
+      </button>
+
+      <button mat-icon-button (click)="onGroupChatClick()" *ngIf="isUserParticipant() || isUserCreator()" class="group-chat-button">
+        <mat-icon>group</mat-icon>
+      </button>
+
+      <button mat-icon-button (click)="onFeedbackClick()" *ngIf="canLeaveFeedback()" class="feedback-button">
+        <mat-icon>star</mat-icon>
+      </button>
+    </div>
+  </mat-card-actions>
+</mat-card>

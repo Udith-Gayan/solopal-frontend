@@ -1,0 +1,130 @@
+.my-activities-container {
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+.navbar {
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  .nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #FF6B6B;
+    cursor: pointer;
+
+    mat-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+  }
+
+  .nav-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+}
+
+.main-content {
+  padding: 32px 24px;
+
+  .activities-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+.activities-card {
+  mat-card-header {
+    margin-bottom: 24px;
+
+    mat-card-title {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    mat-card-subtitle {
+      font-size: 1.1rem;
+      color: #666;
+      margin-top: 8px;
+    }
+  }
+
+  .tab-content {
+    padding: 24px 0;
+  }
+
+  .activities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 24px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .no-activities {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 32px;
+    text-align: center;
+
+    mat-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      color: #ccc;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      margin: 0 0 8px 0;
+      color: #333;
+      font-size: 1.5rem;
+    }
+
+    p {
+      margin: 0 0 24px 0;
+      color: #666;
+    }
+
+    button {
+      border-radius: 8px;
+      padding: 12px 24px;
+    }
+  }
+}
+
+::ng-deep .mat-mdc-tab-group {
+  .mat-mdc-tab-header {
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .mat-mdc-tab-body-wrapper {
+    .mat-mdc-tab-body-content {
+      overflow: visible;
+    }
+  }
+}

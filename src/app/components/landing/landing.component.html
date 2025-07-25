@@ -1,0 +1,208 @@
+<div class="landing-container">
+  <!-- Navigation -->
+  <mat-toolbar class="navbar">
+    <div class="nav-content">
+      <div class="logo">
+        <mat-icon>group</mat-icon>
+        <span class="logo-text">SoloPal</span>
+      </div>
+      <div class="nav-actions">
+        <button mat-button (click)="openAuthDialog('login')" class="nav-button">
+          Sign In
+        </button>
+        <button mat-raised-button color="primary" (click)="openAuthDialog('register')" class="join-button">
+          Join Now
+        </button>
+      </div>
+    </div>
+  </mat-toolbar>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Find Your Perfect
+        <span class="highlight">Activity Companion</span>
+      </h1>
+      <p class="hero-subtitle">
+        Connect with like-minded singles for lunch, trips, coffee dates, parties, and casual meetups. 
+        Build meaningful friendships through shared experiences.
+      </p>
+      <div class="hero-actions">
+        <button mat-raised-button color="primary" size="large" (click)="openAuthDialog('register')" class="cta-button">
+          Start Your Journey
+        </button>
+        <button mat-stroked-button color="primary" size="large" routerLink="/activities" class="browse-button">
+          Browse Activities
+        </button>
+        <div class="social-login">
+          <p>Or sign in with:</p>
+          <div class="social-buttons">
+            <button mat-icon-button (click)="loginWithFacebook()" class="facebook-btn">
+              <mat-icon>facebook</mat-icon>
+            </button>
+            <button mat-icon-button (click)="loginWithInstagram()" class="instagram-btn">
+              <mat-icon>camera_alt</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="section-content">
+      <div class="section-header">
+        <h2>Why SoloPal?</h2>
+        <p>Platonic connections for meaningful experiences</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon location">
+            <mat-icon>location_on</mat-icon>
+          </div>
+          <h3>Location-Based</h3>
+          <p>Find companions near you for local activities and adventures</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon interests">
+            <mat-icon>favorite</mat-icon>
+          </div>
+          <h3>Interest Matching</h3>
+          <p>Connect with people who share your hobbies and passions</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon safety">
+            <mat-icon>security</mat-icon>
+          </div>
+          <h3>Safe & Verified</h3>
+          <p>Verified profiles and safety features for peace of mind</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon communication">
+            <mat-icon>chat</mat-icon>
+          </div>
+          <h3>Easy Communication</h3>
+          <p>Simple messaging to plan and coordinate activities</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Activities Preview -->
+  <section class="activities-preview">
+    <div class="section-content">
+      <div class="section-header">
+        <h2>Popular Activities</h2>
+        <p>Discover what others are planning</p>
+      </div>
+      <div class="activities-grid">
+        <div class="activity-preview" *ngFor="let activity of sampleActivities">
+          <mat-card class="activity-card">
+            <mat-card-header>
+              <div class="activity-category">{{ activity.category }}</div>
+              <div class="spots-left">{{ activity.spotsLeft }} spots left</div>
+            </mat-card-header>
+            <mat-card-content>
+              <h3>{{ activity.title }}</h3>
+              <p>{{ activity.description }}</p>
+              <div class="activity-details">
+                <div class="detail">
+                  <mat-icon>event</mat-icon>
+                  <span>{{ activity.date }}</span>
+                </div>
+                <div class="detail">
+                  <mat-icon>location_on</mat-icon>
+                  <span>{{ activity.location }}</span>
+                </div>
+              </div>
+              <div class="interests">
+                <mat-chip-listbox>
+                  <mat-chip *ngFor="let interest of activity.interests">{{ interest }}</mat-chip>
+                </mat-chip-listbox>
+              </div>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-raised-button color="primary" (click)="openAuthDialog('register')">
+                Join Activity
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials-section">
+    <div class="section-content">
+      <div class="section-header">
+        <h2>Success Stories</h2>
+        <p>Real friendships made through SoloPal</p>
+      </div>
+      <div class="testimonials-grid">
+        <mat-card class="testimonial-card" *ngFor="let testimonial of testimonials">
+          <mat-card-content>
+            <div class="rating">
+              <mat-icon *ngFor="let star of [1,2,3,4,5]">star</mat-icon>
+            </div>
+            <p class="testimonial-text">"{{ testimonial.text }}"</p>
+            <p class="testimonial-author">{{ testimonial.name }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2>Ready to Make New Friends?</h2>
+      <p>Join thousands of singles building meaningful connections</p>
+      <button mat-raised-button color="accent" size="large" (click)="openAuthDialog('register')" class="final-cta">
+        Get Started Today
+      </button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <div class="footer-logo">
+          <mat-icon>group</mat-icon>
+          <span>SoloPal</span>
+        </div>
+        <p>Connecting singles for meaningful platonic experiences.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="#">How it Works</a></li>
+          <li><a href="#">Safety</a></li>
+          <li><a href="#">Community</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 SoloPal. All rights reserved.</p>
+    </div>
+  </footer>
+</div>

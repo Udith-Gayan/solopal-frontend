@@ -1,0 +1,157 @@
+<div class="activities-container">
+  <!-- Navigation -->
+  <mat-toolbar class="navbar">
+    <div class="nav-content">
+      <div class="logo" routerLink="/">
+        <mat-icon>group</mat-icon>
+        <span class="logo-text">SoloPal</span>
+      </div>
+      <div class="nav-actions">
+        <button mat-button routerLink="/">Home</button>
+        <button mat-raised-button color="primary" routerLink="/create-activity" *ngIf="isAuthenticated">
+          Create Activity
+        </button>
+        <button mat-button (click)="openAuthDialog('login')" *ngIf="!isAuthenticated">
+          Sign In
+        </button>
+        <button mat-icon-button [matMenuTriggerFor]="userMenu" *ngIf="isAuthenticated">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+          </button>
+          <button mat-menu-item routerLink="/messages">
+            <mat-icon>message</mat-icon>
+            <span>Messages</span>
+          </button>
+          <button mat-menu-item routerLink="/friends">
+            <mat-icon>people</mat-icon>
+            <span>Friends</span>
+          </button>
+          <button mat-menu-item routerLink="/my-activities">
+            <mat-icon>event</mat-icon>
+            <span>My Activities</span>
+          </button>
+          <button mat-menu-item routerLink="/admin" *ngIf="isAdmin">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>Admin Panel</span>
+          </button>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </mat-toolbar>
+
+  <div class="main-content">
+    <div class="content-wrapper">
+      <!-- Filters Sidebar -->
+      <div class="filters-sidebar">
+        <mat-card class="filters-card">
+          <mat-card-header>
+            <mat-card-title>Filters</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="filter-group">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Category</mat-label>
+                <mat-select [(value)]="selectedCategory" (selectionChange)="onFilterChange()">
+                  <mat-option value="">All Categories</mat-option>
+                  <mat-option value="LUNCH">Lunch</mat-option>
+                  <mat-option value="TRIP">Trip</mat-option>
+                  <mat-option value="COFFEE">Coffee</mat-option>
+                  <mat-option value="PARTY">Party</mat-option>
+                  <mat-option value="WALK">Walk</mat-option>
+                  <mat-option value="TRAVEL">Travel</mat-option>
+                  <mat-option value="DINING">Dining</mat-option>
+                  <mat-option value="SPORTS">Sports</mat-option>
+                  <mat-option value="OUTDOOR">Outdoor</mat-option>
+                  <mat-option value="FITNESS">Fitness</mat-option>
+                  <mat-option value="EVENT">Event</mat-option>
+                  <mat-option value="OTHER">Other</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="filter-group">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Visibility</mat-label>
+                <mat-select [(value)]="selectedVisibility" (selectionChange)="onFilterChange()">
+                  <mat-option value="">All</mat-option>
+                  <mat-option value="PUBLIC">Public</mat-option>
+                  <mat-option value="FRIENDS_ONLY">Friends Only</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="filter-group">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Location</mat-label>
+                <input matInput [(ngModel)]="locationFilter" (input)="onFilterChange()" placeholder="Enter city or zip code">
+              </mat-form-field>
+            </div>
+
+            <div class="filter-group">
+              <h4>Interests</h4>
+              <div class="interests-filter">
+                <mat-checkbox *ngFor="let interest of availableInterests" 
+                             [checked]="selectedInterests.includes(interest)"
+                             (change)="toggleInterest(interest)">
+                  {{ interest }}
+                </mat-checkbox>
+              </div>
+            </div>
+
+            <button mat-raised-button color="primary" (click)="clearFilters()" class="clear-filters">
+              Clear Filters
+            </button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Activities Grid -->
+      <div class="activities-main">
+        <div class="activities-header">
+          <h2>Available Activities</h2>
+          <mat-form-field appearance="outline" class="sort-select">
+            <mat-label>Sort by</mat-label>
+            <mat-select [(value)]="sortBy" (selectionChange)="onSortChange()">
+              <mat-option value="dateTime">Date</mat-option>
+              <mat-option value="created">Recently Added</mat-option>
+              <mat-option value="spots">Available Spots</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="activities-grid" *ngIf="!loading">
+          <app-activity-card 
+            *ngFor="let activity of filteredActivities" 
+            [activity]="activity"
+            [currentUser]="currentUser"
+            (joinActivity)="onJoinActivity($event)"
+            (leaveActivity)="onLeaveActivity($event)"
+            (openFeedback)="onOpenFeedback($event)">
+          </app-activity-card>
+        </div>
+
+        <div class="loading-container" *ngIf="loading">
+          <mat-spinner></mat-spinner>
+          <p>Loading activities...</p>
+        </div>
+
+        <div class="no-activities" *ngIf="!loading && filteredActivities.length === 0">
+          <mat-icon>event_busy</mat-icon>
+          <h3>No activities found</h3>
+          <p>Try adjusting your filters or create a new activity!</p>
+          <button mat-raised-button color="primary" routerLink="/create-activity" *ngIf="isAuthenticated">
+            Create Activity
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

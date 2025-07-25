@@ -1,0 +1,151 @@
+.create-activity-container {
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+.navbar {
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  .nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #FF6B6B;
+    cursor: pointer;
+
+    mat-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+  }
+
+  .nav-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+}
+
+.main-content {
+  padding: 32px 24px;
+
+  .form-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+
+.create-form-card {
+  mat-card-header {
+    margin-bottom: 24px;
+
+    mat-card-title {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    mat-card-subtitle {
+      font-size: 1.1rem;
+      color: #666;
+      margin-top: 8px;
+    }
+  }
+
+  .form-row {
+    margin-bottom: 24px;
+
+    &.two-columns {
+      display: flex;
+      gap: 16px;
+
+      mat-form-field {
+        flex: 1;
+      }
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 0;
+
+        mat-form-field {
+          margin-bottom: 16px;
+        }
+      }
+    }
+
+    .full-width {
+      width: 100%;
+    }
+  }
+
+  .interests-section {
+    h4 {
+      margin: 0 0 8px 0;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .interests-help {
+      margin: 0 0 16px 0;
+      color: #666;
+      font-size: 0.875rem;
+    }
+
+    .interests-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+
+      mat-checkbox {
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-end;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #eee;
+
+    @media (max-width: 768px) {
+      flex-direction: column-reverse;
+
+      button {
+        width: 100%;
+      }
+    }
+
+    .cancel-button {
+      padding: 12px 24px;
+    }
+
+    .submit-button {
+      padding: 12px 32px;
+      border-radius: 8px;
+
+      mat-spinner {
+        margin-right: 8px;
+      }
+    }
+  }
+}

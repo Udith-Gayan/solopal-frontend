@@ -1,0 +1,80 @@
+<div class="my-activities-container">
+  <!-- Navigation -->
+  <mat-toolbar class="navbar">
+    <div class="nav-content">
+      <div class="logo" routerLink="/">
+        <mat-icon>group</mat-icon>
+        <span class="logo-text">SoloPal</span>
+      </div>
+      <div class="nav-actions">
+        <button mat-button routerLink="/activities">Browse Activities</button>
+        <button mat-raised-button color="primary" routerLink="/create-activity">
+          Create Activity
+        </button>
+      </div>
+    </div>
+  </mat-toolbar>
+
+  <div class="main-content">
+    <div class="activities-content">
+      <mat-card class="activities-card">
+        <mat-card-header>
+          <mat-card-title>My Activities</mat-card-title>
+          <mat-card-subtitle>Activities you've created and joined</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <mat-tab-group>
+            <!-- Created Activities Tab -->
+            <mat-tab label="Created by Me">
+              <div class="tab-content">
+                <div class="activities-grid" *ngIf="userActivities.created.length > 0">
+                  <app-activity-card 
+                    *ngFor="let activity of userActivities.created" 
+                    [activity]="activity"
+                    [currentUser]="currentUser"
+                    (joinActivity)="onJoinActivity($event)"
+                    (leaveActivity)="onLeaveActivity($event)"
+                    (openFeedback)="onOpenFeedback($event)">
+                  </app-activity-card>
+                </div>
+                <div class="no-activities" *ngIf="userActivities.created.length === 0">
+                  <mat-icon>event_note</mat-icon>
+                  <h3>No activities created yet</h3>
+                  <p>Start by creating your first activity!</p>
+                  <button mat-raised-button color="primary" routerLink="/create-activity">
+                    Create Activity
+                  </button>
+                </div>
+              </div>
+            </mat-tab>
+
+            <!-- Joined Activities Tab -->
+            <mat-tab label="Joined Activities">
+              <div class="tab-content">
+                <div class="activities-grid" *ngIf="userActivities.joined.length > 0">
+                  <app-activity-card 
+                    *ngFor="let activity of userActivities.joined" 
+                    [activity]="activity"
+                    [currentUser]="currentUser"
+                    (joinActivity)="onJoinActivity($event)"
+                    (leaveActivity)="onLeaveActivity($event)"
+                    (openFeedback)="onOpenFeedback($event)">
+                  </app-activity-card>
+                </div>
+                <div class="no-activities" *ngIf="userActivities.joined.length === 0">
+                  <mat-icon>event_available</mat-icon>
+                  <h3>No activities joined yet</h3>
+                  <p>Browse activities to find something interesting!</p>
+                  <button mat-raised-button color="primary" routerLink="/activities">
+                    Browse Activities
+                  </button>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
